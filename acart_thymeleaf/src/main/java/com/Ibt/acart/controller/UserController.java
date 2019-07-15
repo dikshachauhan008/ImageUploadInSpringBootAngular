@@ -1,6 +1,7 @@
 package com.Ibt.acart.controller;
 import java.util.List;
 
+import com.Ibt.acart.exceptionhandling.ResourceNotFountException;
 import com.Ibt.acart.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Ibt.acart.service.AcartServiceException;
 import com.Ibt.acart.service.UserService;
 
 @RestController
@@ -29,9 +31,17 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
-	public User findOne(@PathVariable Long id)
+	public User findOne(@PathVariable Long id) throws ResourceNotFountException, AcartServiceException
 	{
-		return userService.findOne(id);
+		try {
+			User user = userService.findOne(id);
+			if (user == null) {
+				throw new ResourceNotFountException("User not found");
+			}
+			return user;
+		} catch (AcartServiceException e) {
+			throw new AcartServiceException("Internal Server Exception while getting exception");
+		}
 	}
 	@PostMapping("/add")
 	public void addUser(@RequestBody User user)

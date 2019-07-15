@@ -34,6 +34,17 @@ public class User {
 	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
 	}
+	public User(String user_name,String password) {
+		this.user_name=user_name;
+		this.password=password;
+	}	
+	public User(String user_name,String password,String mail_id,String account_type) {
+		this.user_name=user_name;
+		this.password=password;
+		this.mail_id=mail_id;
+		this.account_type=account_type;
+	}
+	
 	public User() {
 	}
 	public Long getUser_id() {

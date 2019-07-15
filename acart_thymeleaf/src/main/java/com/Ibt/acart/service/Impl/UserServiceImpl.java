@@ -1,5 +1,6 @@
 package com.Ibt.acart.service.Impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,8 +8,10 @@ import com.Ibt.acart.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.Ibt.acart.repository.UserRepository;
+import com.Ibt.acart.service.AcartServiceException;
 import com.Ibt.acart.service.UserService;
 
 @Service
@@ -21,7 +24,7 @@ public class UserServiceImpl implements UserService{
         return (List<User>) userRepository.findAll();
 	}
 	@Override
-	public User findOne(Long id) {
+	public User findOne(Long id) throws AcartServiceException {
 		return userRepository.findOne(id);
 	}
 	@Override
@@ -39,6 +42,23 @@ public class UserServiceImpl implements UserService{
 		userRepository.save(user);
 		return "User updated successfully";
 	}
-	
+	@Override
+	public String login(User user,Model model) {
+		String username=user.getUser_name();
+		String password=user.getPassword();
+		List<User> users= new ArrayList <>();
+		users.addAll((userList()));
+		for(int i=0; i<users.size();i++)
+		{
+			if(((users.get(i).getUser_name()).equals(username))&&((users.get(i).getPassword()).equals(password)))
+			{
+				model.addAttribute("user_id",users.get(i).getUser_id());
+				return "home";
+			}
+		}
+
+		return "login";		
+			}
 	
 }
+
